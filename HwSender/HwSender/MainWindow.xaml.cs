@@ -29,11 +29,13 @@ public partial class MainWindow : Window
 
     public void SendData(string data)
     {
+        Uri uri = new Uri("tcp://4.tcp.eu.ngrok.io");
         data += '\0';
         byte[] requestBytes = Encoding.ASCII.GetBytes(data);
 
         using Socket socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-        socket.Connect("127.0.0.1", 8889);
+        socket.Connect(uri.Host, 17403);
+        //socket.Connect("localhost", 8889);
 
         // Send the request.
         // For the tiny amount of data in this example, the first call to Send() will likely deliver the buffer completely,
