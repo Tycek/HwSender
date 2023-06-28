@@ -29,13 +29,13 @@ public partial class MainWindow : Window
 
     public void SendData(string data)
     {
-        Uri uri = new Uri("tcp://4.tcp.eu.ngrok.io");
+        //Uri uri = new Uri("tcp://4.tcp.eu.ngrok.io");
         data += '\0';
         byte[] requestBytes = Encoding.ASCII.GetBytes(data);
 
         using Socket socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-        socket.Connect(uri.Host, 17403);
-        //socket.Connect("localhost", 8889);
+        //socket.Connect(uri.Host, 17403);
+        socket.Connect("localhost", 8889);
 
         // Send the request.
         // For the tiny amount of data in this example, the first call to Send() will likely deliver the buffer completely,
@@ -51,12 +51,16 @@ public partial class MainWindow : Window
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-        SendDataModel data = new SendDataModel
+        bool parseResult = int.TryParse(TB1.Text, out int id);
+        if (parseResult)
         {
-            LocationId = 1,
-            Signal = true
-        };
-        SendData(JsonSerializer.Serialize(data));
+            SendDataModel data = new SendDataModel
+            {
+                LocationId = id,
+                Signal = true
+            };
+            SendData(JsonSerializer.Serialize(data));
+        }
     }
 }
 
